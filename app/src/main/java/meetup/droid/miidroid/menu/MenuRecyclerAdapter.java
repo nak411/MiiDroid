@@ -1,7 +1,9 @@
 package meetup.droid.miidroid.menu;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -10,11 +12,11 @@ import meetup.droid.miidroid.R;
 
 /**
  */
-public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder> {
+public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder> implements ViewHolderCallbacks {
 
-    private String[] mDataList;
+    private MenuItem[] mDataList;
 
-    public MenuRecyclerAdapter(String[] data) {
+    public MenuRecyclerAdapter(MenuItem[] data) {
         mDataList = data;
     }
 
@@ -23,13 +25,13 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
 
         LayoutInflater inflate = LayoutInflater.from(parent.getContext());
         View view = inflate.inflate(R.layout.row_menu_item_view, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, this);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String item = mDataList[position];
-        holder.mTitle.setText(item);
+        MenuItem item = mDataList[position];
+        holder.mTitle.setText(item.getTitle());
     }
 
     @Override
@@ -42,13 +44,29 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
         return mDataList.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onItemClick(View v, int position) {
+        MenuItem item = mDataList[position];
+        Intent intent = new Intent(v.getContext(), item.getClazz());
+        v.getContext().startActivity(intent);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView mTitle;
 
-        public ViewHolder(View itemView) {
+        private ViewHolderCallbacks mCallbacks;
+
+        public ViewHolder(View itemView, ViewHolderCallbacks callbacks) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            itemView.setOnClickListener(this);
+            mCallbacks = callbacks;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mCallbacks.onItemClick(v, getAdapterPosition());
         }
     }
 }

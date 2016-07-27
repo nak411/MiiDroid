@@ -6,26 +6,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.LinearLayout;
 
+import meetup.droid.miidroid.MainActivity;
 import meetup.droid.miidroid.R;
+import meetup.droid.miidroid.activity.lifecycle.LifecycleDemoActivity;
 
 /**
  * Contains a list of buttons for launching a new activity
  */
 public class MenuActivity extends AppCompatActivity {
 
-    private static String[] menuItems = new String[] {
-            "Item1",
-            "Item2",
-            "Item3",
-            "Item4",
-            "Item5",
-            "Item6",
-            "Item10",
-            "Item21",
-            "Item32",
-            "Item43",
-            "Item54",
-            "Item65"};
+    private static MenuItem[] menuItems = new MenuItem[]
+
+    {
+        new MenuItem("Activity Lifecycle", LifecycleDemoActivity.class)
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
